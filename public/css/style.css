@@ -56,7 +56,7 @@
 }
 
 /* cards */
-.card{
+.listing-card{
     border:none !important;
     margin-bottom: 2 rem;
    
@@ -70,7 +70,7 @@
 
 .card-body{
     padding:0 !important;
-    ma
+   
 }
 
 .card-text p{

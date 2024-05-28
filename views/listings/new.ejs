@@ -6,8 +6,8 @@
 
         
          
-    <form method="POST" action="/listings" novalidate class="needs-validation">
-        <div>
+    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+        <div class="mb-3">
 
             <label for="title" class="form-label">Title</label>
             <input name="listing[title]" placeholder="Enter title" type="text" class="form-control"   required/>
@@ -25,17 +25,16 @@
         </div>
        
         <br/>
-      
+    
+
         <div>
 
-            <label for="image" class="form-label">Image Link</label>
-            <input name="listing[image]" placeholder="Enter image URL/Link" type="text"  class="form-control"/>
+            <label for="image" class="form-label">Upload Listing Image</label>
+            <input name="listing[image]"  type="file"  class="form-control"/>
             
             
         </div>
        
-        
-        <br/>
       
 
         <div class="row">
