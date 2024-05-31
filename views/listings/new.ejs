@@ -3,84 +3,66 @@
     <h3 class="addListings">Create a new Listing</h3>
     <div class="row">
         <div class="col-8 offset-2">
+            <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input name="listing[title]" id="title" placeholder="Enter title" type="text" class="form-control" required />
+                    <div class="valid-feedback">Title looks good!</div>
+                    <div class="invalid-feedback">Please enter a valid title!</div>
+                </div>
 
-        
-         
-    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
-        <div class="mb-3">
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="listing[description]" id="description" placeholder="Enter description" class="form-control" required></textarea>
+                    <div class="invalid-feedback">Please enter a valid description!</div>
+                </div>
 
-            <label for="title" class="form-label">Title</label>
-            <input name="listing[title]" placeholder="Enter title" type="text" class="form-control"   required/>
-          
-            <div class="valid-feedback">Title looks good!</div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload Listing Image</label>
+                    <input name="listing[image]" id="image" type="file" class="form-control" />
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="price" class="form-label">Price</label>
+                        <input name="listing[price]" id="price" placeholder="Enter price" type="text" class="form-control" required />
+                        <div class="invalid-feedback">Please enter a correct price!</div>
+                    </div>
+                    <div class="col-md-8">
+                        <label for="country" class="form-label">Country</label>
+                        <input name="listing[country]" id="country" placeholder="Enter country" type="text" class="form-control" required />
+                        <div class="invalid-feedback">Please enter the country!</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input name="listing[location]" id="location" placeholder="Enter location" type="text" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-dark">Add</button>
+            </form>
         </div>
-        <br/>
-      
+    </div>
 
-        <div>
-
-            <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]" placeholder="Enter description"  class="form-control"   required></textarea>
-            <div class="invalid-feedback">please enter a valid description!</div>
-        </div>
-       
-        <br/>
-    
-
-        <div>
-
-            <label for="image" class="form-label">Upload Listing Image</label>
-            <input name="listing[image]"  type="file"  class="form-control"/>
-            
-            
-        </div>
-       
-      
-
-        <div class="row">
-
-            <div class="col-md-4">
-
-                <label for="price" class="form-label"   required>Price</label>
-                <input name="listing[price]" placeholder="Enter price"   class="form-control"   required/>
-                <div class="invalid-feedback">please enter correct price!</div>
-            </div>
-           
-          
-            <br/>
-       
-    
-            <div class="col-md-8">
-    
-                <label for="country" class="form-label">Country</label>
-                <input name="listing[country]" placeholder="Enter Country" type="text"  class="form-control" required/>
-                <div class="invalid-feedback">Please Enter the country!</div>
-            </div>
-        </div>
-
-       
-      
-        <br/>
-     
-
-        <div>
-
-            <label for="location" class="form-label">Location</label>
-            <input name="listing[location]" placeholder="Enter Location" type="text"  class="form-control" aria-required=""/>
-            
-        </div>
-       
-        <br/>
-     <br/>
-
-        <button class="btn btn-dark">Add</button>
-        <br/>
-        <br/>
-        </form>
-
-
-    </form>
-</div>
-</div>
-    
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 </body>

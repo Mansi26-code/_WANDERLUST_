@@ -2,22 +2,20 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 cloudinary.config({
-    cloud_name:process.env.CLOUD_NAME,
-    api_key:process.env.CLOUD_API_KEY,
-    api_secret:process.env.CLOUD_API_SECRET
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-
-//This storage is like...google drive pr aapne ek folder bana liya jahan aapko files upload krni h 
 const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-      folder: 'wanderlust_DEV',
-    allowedFormats:["png","jpg","jpeg"],
-    },
-  });
+  cloudinary,
+  params: {
+    folder: 'your_folder_name',
+    allowedFormats: ['jpeg', 'png', 'jpg'],
+  },
+});
 
-  module.exports={
-    cloudinary,
-    storage,
-  };
+module.exports = {
+  cloudinary,
+  storage,
+};
