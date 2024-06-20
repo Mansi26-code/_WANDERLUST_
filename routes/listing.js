@@ -9,19 +9,26 @@ const { listingSchema } = require('../schema.js'); // Ensure the path is correct
 
 const multer = require('multer');
 const { storage } = require('../cloudConfig.js');
-const upload = multer({ storage });
+const uploadListRouter = require('../controllers/uploadListing.js');
+const upload = multer({ storage: storage });
 
 router.route('/')
   .get(wrapAsync(listingController.index))
-  .post( upload.single('listing[image]'), (req,res)=>{
+
+  .post( upload.single("listing[image]"), (req,res)=>{
     res.send(req.file)
   })
   
+
+  .post(isLoggedIn, uploadListRouter)
+  //.post(isLoggedIn, upload.single('image'), validateListing, wrapAsync(listingController.createListing));
+
+
 router.get('/new', isLoggedIn, listingController.renderNewForm);
 
 router.route('/:id')
   .get(wrapAsync(listingController.showListing))
-  .put(isLoggedIn, isOwner, validateListing, wrapAsync(listingController.updateListing))
+  .put(isLoggedIn, isOwner, upload.single("listing[image]"),validateListing, wrapAsync(listingController.updateListing))
   .delete(isLoggedIn, isOwner, wrapAsync(listingController.deleteListing));
 
 router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));

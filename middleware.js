@@ -7,12 +7,12 @@ module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.redirectUrl = req.originalUrl;
         req.flash("error", "You must be logged in to access this page!");
-        return res.redirect("/login"); // Use return to halt further execution
+        return res.redirect("/login");
     }
     next();
 };
 
-
+// Middleware to save the redirect URL
 module.exports.saveRedirectUrl = (req, res, next) => {
     if (req.session.redirectUrl) {
         res.locals.redirectUrl = req.session.redirectUrl;
@@ -20,7 +20,8 @@ module.exports.saveRedirectUrl = (req, res, next) => {
     next();
 };
 
-module.exports.isOwner=async(req,res,next)=>{
+// Middleware to check if the user is the owner of the listing
+module.exports.isOwner = async (req, res, next) => {
     const { id } = req.params;
     const listing = await Listing.findById(id);
 
@@ -33,40 +34,34 @@ module.exports.isOwner=async(req,res,next)=>{
         req.flash("error", "You don't have permission to access this listing");
         return res.redirect(`/listings/${id}`);
     }
-next();
-  
+    next();
 };
 
+// Middleware to validate listing data
+module.exports.validateListing = (req, res, next) => {
+    const { error } = listingSchema.validate(req.body);
 
-    module.exports. validateListing=(req,res,next)=>{
-
-        let {error}=listingSchema.validate(req.body);
-       
-        if(error)
-        {
-          let errMsg=error.details.map((el)=>el.message).join(",");
-         throw new ExpressError(400,errMsg);
-        }
-        else{
-          next();
-        }
-      
-      };
- const { reviewSchema } = require('./schema.js');
-
-
-module.exports.validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
     if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
+        const errMsg = error.details.map(el => el.message).join(",");
+        throw new ExpressError(errMsg, 400);
     } else {
         next();
     }
 };
 
+// Middleware to validate review data
+module.exports.validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
 
+    if (error) {
+        const errMsg = error.details.map(el => el.message).join(",");
+        throw new ExpressError(errMsg, 400);
+    } else {
+        next();
+    }
+};
 
+// Middleware to check if the user is the author of the review
 module.exports.isReviewAuthor = async (req, res, next) => {
     const { id, reviewId } = req.params;
     const review = await Review.findById(reviewId);
