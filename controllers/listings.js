@@ -57,39 +57,9 @@ module.exports.index= async (req, res) => {
 
     req.flash("success", "New Listing Created!");
     res.redirect("/listings");
-}
+};
 
-  module.exports.createListing = async (req, res, next) => {
-    console.log('inside create listing');
-    try {
-      const { filename } = req.file;
-      const imageUrl = `/images/${filename}`;
-  
-      const data = {
-        ...req.body.listing,
-        image: {
-          url: imageUrl,
-          filename,
-        },
-        owner: req.user._id,
-      };
-  
-      const validatedData = listingSchemaInput.parse(data);
-      console.log('data validated');
-      const newListing = new Listing(validatedData);
-      console.log(newListing);
-      await newListing.save();
-  
-      req.flash('success', 'New Listing Created!');
-      res.redirect('/listings');
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        req.flash('error', 'Invalid input data');
-        return res.redirect('/listings/new');
-      }
-      next(error);
-    }
-  };
+
 
 
    module.exports.renderEditForm=async (req, res) => {
@@ -111,11 +81,18 @@ module.exports.index= async (req, res) => {
     const { id } = req.params;
     
 
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    let listing=await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+    if(typeof req.file!=="undefined")
+      {
+    let url = req.file.path;
+    let filename = req.file.filename;
+    listing.image={url,filename};
+    await listing.save();
+      };
 
     req.flash("success", "Listing Updated!");
     res.redirect(`/listings/${id}`);
-}
+};
 
 module.exports.deleteListing=async (req, res) => {
 
