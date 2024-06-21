@@ -56,27 +56,16 @@ module.exports.showListing = async (req, res, next) => {
   }
 };
 
-module.exports.createListing = [
-  handleFileUpload,
-  validateListing,
-  async (req, res, next) => {
-    try {
-      const { path: url, filename } = req.file || {};
-      const newListingData = {
-        ...req.body.listing,
-        image: { url, filename }
-      };
-      const newListing = new Listing(newListingData);
-      newListing.owner = req.user._id; // Assuming req.user._id is set in authentication middleware
-      await newListing.save();
-      req.flash("success", "New Listing Created!");
-      res.redirect("/listings");
-    } catch (error) {
-      next(error); // Pass error to error-handling middleware
-    }
-  }
-];
-
+module.exports.createListing = async (req, res, next) => {
+  let url = req.file.path;
+  let filename = req.file.filename;
+  const newListing = new Listing(req.body.listing);
+  newListing.owner = req.user._id;
+  newListing.image = { url, filename };
+  let savedListing = await newListing.save();
+  req.flash("success", "New Listing Created");
+  res.redirect("/listings");
+}
 module.exports.renderEditForm = async (req, res, next) => {
   try {
     const { id } = req.params;
