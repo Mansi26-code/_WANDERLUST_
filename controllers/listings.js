@@ -82,26 +82,20 @@ module.exports.renderEditForm = async (req, res) => {
   res.render("listings/edit.ejs", { listing });
 };
 
-module.exports.updateListing = [
-  upload.single('image'),
-  validateListing,  // Add validation middleware here
-  async (req, res, next) => {
-    const { id } = req.params;
-    try {
-      const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }, { new: true });
-      if (req.file) {
-        const { path: url, filename } = req.file;
-        listing.image = { url, filename };
-      }
-      await listing.save();
-      req.flash("success", "Listing Updated!");
-      res.redirect(`/listings/${id}`);
-    } catch (error) {
-      next(error);
-    }
+module.exports.updateListing = async (req, res) => {
+  let { id } = req.params;
+  let updatedListing = await Listing.findByIdAndUpdate(id, {
+      ...req.body.listing,
+  });
+  if (typeof req.file !== "undefined") {
+      let url = req.file.path;
+      let filename = req.file.filename;
+      updatedListing.image = { url, filename };
+      await updatedListing.save();
   }
-];
-
+  req.flash("success", "Listing Updated");
+  res.redirect(`/listings/${id}`);
+}
 module.exports.deleteListing = async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id);
