@@ -1,5 +1,5 @@
 const Listing = require("../models/listing");
-const mbxGeocoding = require('@mapbox/mapbox-sdk/services/styles');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken=process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken});
 const { listingSchemaInput } = require('../schema.js'); // Assuming listingSchemaInput is defined externally
@@ -76,7 +76,7 @@ module.exports.createListing = async (req, res, next) => {
   newListing.owner = req.user._id;
   newListing.image = { url, filename };
   let savedListing = await newListing.save();
-  // console.log(savedListing);
+  // console.log(savedListinnng);
   req.flash("success", "New Listing Created");
   res.redirect("/listings");
 }
