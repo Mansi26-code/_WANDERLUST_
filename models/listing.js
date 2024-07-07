@@ -1,8 +1,5 @@
-// models/listing.js
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Review = require('./review.js');
-
 
 const listingSchema = new Schema({
   title: { type: String, required: true },
@@ -26,9 +23,19 @@ const listingSchema = new Schema({
   },
   category:{
     type:String,
-    enum:[ "Trending","Rooms","Mountain City","Beach", "Castle","Amazing Pools","Farm House"]
-
-  }
+    enum:["Trending", "Rooms", "Mountain City", "Beach", "Castle", "Amazing Pools", "Farm House"],
+  },
+  geometry:{
+    type:{
+      type:String,
+      enum:["Point"],
+      Required:true,
+    },
+    coordinates:{
+      type:[Number],
+      required:true
+    },
+  },
 });
 
 listingSchema.post('findOneAndDelete', async (listing) => {
@@ -43,3 +50,4 @@ listingSchema.post('findOneAndDelete', async (listing) => {
 
 const Listing = mongoose.model('Listing', listingSchema);
 module.exports = Listing;
+
