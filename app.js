@@ -59,9 +59,9 @@ const sessionOptions={
     httpOnly:true,//cross scripting attack se bachata h
   },
 };
-app.get("/", (req, res) => {
-  res.send("Hi, I am root");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hi, I am root");
+// });
 
 app.use(session(sessionOptions)); //ab agar cookies me connect.sid dikh rha h...mtlb sessions work krrhe hain
 app.use(flash());
@@ -87,6 +87,32 @@ app.get("/demouser",async(req,res)=>{
 
   });
 
+
+
+  
+  const places = [
+      { name: 'Paris' },
+      { name: 'New York' },
+      { name: 'Tokyo' },
+      // Add more data as needed
+  ];
+  
+  app.get('/search', (req, res) => {
+      const query = req.query.query.toLowerCase();
+      const results = places.filter(place => place.name.toLowerCase().includes(query));
+      res.json({ results });
+  });
+  
+  // Error handling middleware
+  app.use((req, res, next) => {
+      res.status(404).json({ error: 'Not Found' });
+  });
+  
+  app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+  });
+  
+  
    let registeredUser=await User.register(fakeUser,"helloworld");//register batata h ki kya vo user unique h
    res.send(registeredUser);
 });//hashing algo used=pbkdf2

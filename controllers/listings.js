@@ -67,7 +67,7 @@ module.exports.createListing = async (req, res, next) => {
   //   limit: 1
   // })
   //   .send();
-  //   console.log(response.body.features[0].geometry);
+  //   console.log(response.body.features[0].geometry); 
   //   res.send("Done!");
 
   let url = req.file.path;
