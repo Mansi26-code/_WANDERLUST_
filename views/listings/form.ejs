@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Listing</title>
+</head>
+<body>
+    <form action="/listings" method="POST" enctype="multipart/form-data">
+        <!-- Other form fields -->
+        <label for="category">Category</label>
+        <select name="listing[category]" id="category">
+            <option value="Trending">Trending</option>
+            <option value="Rooms">Rooms</option>
+            <option value="Mountain City">Mountain City</option>
+            <option value="Beach">Beach</option>
+            <option value="Castle">Castle</option>
+            <option value="Amazing Pools">Amazing Pools</option>
+            <option value="Farm House">Farm House</option>
+        </select>
+        <button type="submit">Create Listing</button>
+    </form>
+</body>
+</html>

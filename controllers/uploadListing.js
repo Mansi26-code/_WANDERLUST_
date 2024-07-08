@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const cloudinary = require('cloudinary');
-const Listing=require("../models/listing");
+const Listing = require("../models/listing");
 const uploadListRouter = express.Router();
 
 const upload = multer({ dest: 'uploads/' });
@@ -11,7 +11,7 @@ cloudinary.config({
   api_secret: 'ty_nPu7eiaSWYr22-bLNMbM7fr0',
 });
 
-uploadListRouter.post('/', upload.array('listing[image]', 1), async(req, res) => {
+uploadListRouter.post('/', upload.array('listing[image]', 1), async (req, res) => {
     try {
         const listing = req.body.listing;
         const image = req.files[0].path;
@@ -20,15 +20,16 @@ uploadListRouter.post('/', upload.array('listing[image]', 1), async(req, res) =>
             public_id: 'listing-image',
         });
         const validatedData = {
-          title: listing.title,
-          description: listing.description,
-          image: {
-            url: result.secure_url,
-            filename: result.public_id,
-          },
-          price: listing.price,
-          location: listing.location,
-          country: listing.country,
+            title: listing.title,
+            description: listing.description,
+            image: {
+                url: result.secure_url,
+                filename: result.public_id,
+            },
+            price: listing.price,
+            location: listing.location,
+            country: listing.country,
+            category: listing.category, // Capture category
         };
 
         const newListing = new Listing(validatedData);

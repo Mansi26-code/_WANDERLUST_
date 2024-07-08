@@ -1,56 +1,83 @@
-const Listing = require("../models/listing");
+const Listing = require('../models/listing');
 const { listingSchemaJoi } = require('../schema.js');
-const Joi = require('joi');
-const multer = require('multer');
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
-const mapToken = process.env.MAP_TOKEN; // Ensure this environment variable is set
+const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
-// Middleware to handle file uploads using multer
-const upload = multer({ dest: 'uploads/' });
+module.exports.index = async (req, res) => {
+    const { category } = req.query;
+    const query = category ? { category } : {};
+    const listings = await Listing.find(query);
+    res.render('listings/index', { listings });
+};
 
-// Controller method for creating a new listing
+module.exports.renderNewForm = (req, res) => {
+    res.render('listings/new');
+};
+
 module.exports.createListing = async (req, res, next) => {
     try {
-        // Validate incoming data
         const { error } = listingSchemaJoi.validate(req.body.listing);
         if (error) {
-            req.flash("error", error.details.map(err => err.message).join(', '));
-            return res.redirect("/listings/new");
+            req.flash('error', error.details.map(err => err.message).join(', '));
+            return res.redirect('/listings/new');
         }
 
-        // Perform geocoding to get coordinates
         const response = await geocodingClient.forwardGeocode({
             query: `${req.body.listing.location}, ${req.body.listing.country}`,
             limit: 1
         }).send();
 
         const coordinates = response.body.features[0].geometry.coordinates;
-
-        // Prepare image details
-        const url = req.file.path;
-        const filename = req.file.filename;
-
-        // Create new listing object
         const newListing = new Listing({
             ...req.body.listing,
-            image: { url, filename },
-            owner: req.user._id,
             geometry: {
-                type: "Point",
+                type: 'Point',
                 coordinates: coordinates
-            }
+            },
+            owner: req.user._id
         });
 
-        // Save listing to database
         await newListing.save();
-
-        req.flash("success", "New Listing Created");
-        res.redirect("/listings");
+        req.flash('success', 'New Listing Created');
+        res.redirect(`/listings/${newListing._id}`);
     } catch (error) {
-        next(error); // Pass error to error-handling middleware
+        next(error);
     }
 };
+
+module.exports.showListing = async (req, res) => {
+    const listing = await Listing.findById(req.params.id).populate('reviews').populate('owner');
+    if (!listing) {
+        req.flash('error', 'Listing not found');
+        return res.redirect('/listings');
+    }
+    res.render('listings/show', { listing });
+};
+
+module.exports.renderEditForm = async (req, res) => {
+    const listing = await Listing.findById(req.params.id);
+    if (!listing) {
+        req.flash('error', 'Listing not found');
+        return res.redirect('/listings');
+    }
+    res.render('listings/edit', { listing });
+};
+
+module.exports.updateListing = async (req, res) => {
+    const listing = await Listing.findByIdAndUpdate(req.params.id, { ...req.body.listing });
+    req.flash('success', 'Listing updated successfully');
+    res.redirect(`/listings/${listing._id}`);
+};
+
+module.exports.deleteListing = async (req, res) => {
+    await Listing.findByIdAndDelete(req.params.id);
+    req.flash('success', 'Listing deleted successfully');
+    res.redirect('/listings');
+};
+
+
+
 
 
 

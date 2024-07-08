@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listings</title>
+</head>
+<body>
+    <nav>
+        <button onclick="filterListings('')">All</button>
+        <button onclick="filterListings('Trending')">Trending</button>
+        <button onclick="filterListings('Rooms')">Rooms</button>
+        <button onclick="filterListings('Mountain City')">Mountain City</button>
+        <button onclick="filterListings('Beach')">Beach</button>
+        <button onclick="filterListings('Castle')">Castle</button>
+        <button onclick="filterListings('Amazing Pools')">Amazing Pools</button>
+        <button onclick="filterListings('Farm House')">Farm House</button>
+    </nav>
+    <div id="listings">
+        <% listings.forEach(listing => { %>
+            <div>
+                <h2><%= listing.title %></h2>
+                <p><%= listing.description %></p>
+            </div>
+        <% }) %>
+    </div>
+
+    <script>
+        function filterListings(category) {
+            const url = category ? `/listings?category=${category}` : '/listings';
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
