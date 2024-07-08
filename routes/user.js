@@ -1,30 +1,17 @@
-const express=require("express");
-const router=express.Router();
-const User=require("../models/user.js");
-const ExpressError=require("../utils/ExpressError.js");
-const wrapAsync=require("../utils/wrapAsync.js");
-const passport=require("passport");
-const{saveRedirectUrl}=require("../middleware.js");
-const usercontroller=require("../controllers/user.js");
+const express = require('express');
+const router = express.Router();
+const passport = require('passport');
+const wrapAsync = require('../utils/wrapAsync');
+const usersController = require('../controllers/user');
 
+router.route('/register')
+  .get(usersController.renderRegister)
+  .post(wrapAsync(usersController.register));
 
-//for get and post of signup
-router.route("/signup")
-.get(usercontroller.renderSignupForm)
-.post(wrapAsync(usercontroller.signup));
+router.route('/login')
+  .get(usersController.renderLogin)
+  .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), usersController.login);
 
-//for get and post of login
+router.get('/logout', usersController.logout);
 
-router.route("/login")
-.get(usercontroller.renderloginForm)
-.post(passport.authenticate("local",{
-    failureRedirect:"/login",
-    failureFlash:true,
-}),
-usercontroller.Afterlogin
-);
-
-
-router.get("/logout",usercontroller.Afterlogout);
-   
-module.exports =router;
+module.exports = router;

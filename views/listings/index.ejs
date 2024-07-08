@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listings</title>
     <style>
+        /* Your CSS styles */
         .filter {
             text-align: center;
             margin-right: 36px;
@@ -103,7 +107,7 @@
     </style>
 </head>
 <body>
-    <% layout("/layouts/boilerplate")%>
+    <% layout("/layouts/boilerplate") %>
     <div class="filters">
         <div class="filter">
             <div><i class="fa-solid fa-fire"></i></div>
@@ -137,7 +141,6 @@
             <div><i class="fa-solid fa-snowflake"></i></div>
             <p>Arctic</p>
         </div>
-
         <div class="filter">
             <div><i class="fa-solid fa-sailboat"></i></div>
             <p>Boats</p>
@@ -149,11 +152,12 @@
             </div>
         </div>
     </div>
+
     <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
-        <% for(let listing of allListings) { %>
-            <a href="/listings/<%=listing._id%>" class="listing-link">
+        <% for (let listing of allListings) { %>
+            <a href="/listings/<%= listing._id %>" class="listing-link">
                 <div class="card col listing-card" style="width: 22rem;">
-                    <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height:20rem"/>
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height:20rem"/>
                     <div class="card-img-overlay"></div>
                     <div class="card-body">
                         <p class="card-text">
@@ -171,19 +175,14 @@
             </a>
         <% } %>
     </div>
+    
+
     <script>
         let taxSwitch = document.getElementById("flexSwitchCheckDefault");
         taxSwitch.addEventListener("click", () => {
-            console.log("clicked");
-
             let taxInfo = document.getElementsByClassName("tax-info");
-            console.log(taxInfo);
             for (let info of taxInfo) {
-                if (info.style.display !== "inline") {
-                    info.style.display = "inline";
-                } else {
-                    info.style.display = "none";
-                }
+                info.style.display = taxSwitch.checked ? "inline" : "none";
             }
         });
     </script>
