@@ -9,7 +9,7 @@ module.exports = {
         const { category } = req.query;
         const query = category ? { category } : {};
         const listings = await Listing.find(query);
-        res.render('listings/index', { listings });
+        res.render('listings/index', { allListings });  // Corrected variable name to render
     },
 
     renderNewForm: (req, res) => {
