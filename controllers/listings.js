@@ -1,15 +1,21 @@
 const Listing = require('../models/listing');
-const { listingSchemaJoi } = require('../schema.js');
+const { listingSchema } = require('../schema.js'); 
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports = {
     index: async (req, res) => {
-        const { category } = req.query;
-        const query = category ? { category } : {};
-        const listings = await Listing.find(query);
-        res.render('listings/index', { allListings });  // Corrected variable name to render
+        try {
+            const { category } = req.query;
+            const query = category ? { category } : {};
+            const allListings = await Listing.find(query);
+            res.render('listings/index', { allListings });
+        } catch (error) {
+            console.error(error);
+            req.flash('error', 'Something went wrong');
+            res.redirect('/listings');
+        }
     },
 
     renderNewForm: (req, res) => {
@@ -18,7 +24,7 @@ module.exports = {
 
     createListing: async (req, res, next) => {
         try {
-            const { error } = listingSchemaJoi.validate(req.body.listing);
+            const { error } = listingSchema.validate( req.body );
             if (error) {
                 req.flash('error', error.details.map(err => err.message).join(', '));
                 return res.redirect('/listings/new');
@@ -101,7 +107,6 @@ module.exports = {
         }
     }
 };
-
 
 
 
