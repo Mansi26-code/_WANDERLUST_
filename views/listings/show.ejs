@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <p class="card-text"><b>Owned By <%= listing.owner.username %></b></p>
                     <p class="card-text"><%= listing.description %></p>
-                    <p>&#8377;<%= listing.price.toLocaleString("en-IN") %></p>
+                    <p>&#8377;<%= listing.price %></p>
                     <p><%= listing.location %>, <%= listing.country %></p>
                     <p>Category: <%= listing.category %></p>
                 </div>
@@ -65,7 +65,7 @@
                         <div class="card-body">
                             <h5 class="card-title"><%= review.author.username %></h5>
                             <p class="card-text"><%= review.comment %></p>
-                            <p class="card-text">Rating: <%= review.rating %></p>
+                            <p class="card-text">Rating: <%= '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating) %></p>
                             <% if (currUser && currUser._id.toString() === review.author._id.toString()) { %>
                             <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" class="d-inline">
                                 <button class="btn btn-sm btn-danger">Delete</button>
@@ -82,26 +82,26 @@
                 <h4>Where You'll Be</h4>
                 <div id="map" style="height: 400px;"></div>
             </div>
+            
+            <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+            <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
+            
+            <script>
+                mapboxgl.accessToken = 'pk.eyJ1IjoibWFuc2ktMjYiLCJhIjoiY2x4cDQwam56MDc5dDJqcXNseHEyOHI1ciJ9.qqe7RUVJXwvwOkElrwXqnQ';
+            
+                const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+            
+                const map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: coordinates,
+                    zoom: 12
+                });
+            
+                new mapboxgl.Marker()
+                    .setLngLat(coordinates)
+                    .addTo(map);
+            </script>
         </div>
     </div>
 </div>
-
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
-
-<script>
-    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
-
-    const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
-
-    const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: coordinates,
-        zoom: 12
-    });
-
-    new mapboxgl.Marker()
-        .setLngLat(coordinates)
-        .addTo(map);
-</script>
