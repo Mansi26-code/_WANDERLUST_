@@ -5,18 +5,7 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports = {
-    index: async (req, res) => {
-        try {
-            const { category } = req.query;
-            const query = category ? { category } : {};
-            const allListings = await Listing.find(query);
-            res.render('listings/index', { allListings });
-        } catch (error) {
-            console.error(error);
-            req.flash('error', 'Something went wrong');
-            res.redirect('/listings');
-        }
-    },
+   
 
     renderNewForm: (req, res) => {
         res.render('listings/new');
@@ -112,5 +101,31 @@ module.exports = {
             req.flash('error', 'Something went wrong');
             res.redirect('/listings');
         }
+    },
+
+    searchListings: async (req, res) => {
+        try {
+            const { query } = req.query;
+            const searchQuery = new RegExp(query, 'i'); // Case-insensitive search
+            const allListings = await Listing.find({
+                $or: [
+                    { location: searchQuery },
+                    { country: searchQuery }
+                ]
+            });
+    
+            if (allListings.length > 0) {
+                res.render('listings/index', { allListings, category: null }); // or send JSON if using AJAX
+            } else {
+                res.render('listings/index', { allListings: [], category: null }); // Empty result
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Something went wrong' });
+        }
     }
+    
+
+
+    
 };

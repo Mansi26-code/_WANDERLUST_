@@ -3,7 +3,7 @@ const app=express();
 const users=require("./routes/user.js")
 const session=require("express-session");
 const flash=require("connect-flash");
-
+const path = require("path");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 

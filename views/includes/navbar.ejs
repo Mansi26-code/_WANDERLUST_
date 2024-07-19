@@ -88,10 +88,11 @@
                 </div>
 
                 <div class="search-container">
-                    <form id="searchForm" class="d-flex">
-                        <input type="text" id="searchQuery" placeholder="Search..." class="form-control me-2">
+                    <form id="searchForm" class="d-flex" action="/listings/search" method="get">
+                        <input type="text" id="searchQuery" name="query" placeholder="Search..." class="form-control me-2">
                         <button type="submit" class="btn btn-search">Search</button>
                     </form>
+                    
                 </div>
                 <div id="results"></div>
                 <script>

@@ -1,3 +1,8 @@
+const Listing = require('../models/listing');
+const Review = require('../models/review');
+const ExpressError = require('../utils/ExpressError'); // Assuming you have a custom error class
+const { reviewSchema } = require('../schema.js');
+
 module.exports.createReview = async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.id);
@@ -5,6 +10,7 @@ module.exports.createReview = async (req, res) => {
             throw new ExpressError('Listing not found', 404);
         }
         const newReview = new Review(req.body.review);
+        
         newReview.author = req.user._id; // Assuming req.user._id is set by your authentication middleware
         listing.reviews.push(newReview);
         await newReview.save();
@@ -29,3 +35,4 @@ module.exports.deleteReview = async (req, res) => {
         res.redirect(`/listings/${id}`);
     }
 };
+

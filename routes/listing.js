@@ -20,7 +20,11 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
+// Add this route for search functionality
+router.get('/search', wrapAsync(listingController.searchListings));
+
 module.exports = router;
+
 
 
 
