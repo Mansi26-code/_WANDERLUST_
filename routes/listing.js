@@ -12,7 +12,7 @@ router.route('/')
   .post(isLoggedIn, upload.single('listing[image]'), validateListing, wrapAsync(listingController.createListing));
 
 router.get('/new', isLoggedIn, listingController.renderNewForm);
-
+router.get('/search', wrapAsync(listingController.searchListings));
 router.route('/:id')
   .get(wrapAsync(listingController.showListing))
   .put(isLoggedIn, upload.single('image'), isOwner, validateListing, wrapAsync(listingController.updateListing))
@@ -21,7 +21,7 @@ router.route('/:id')
 router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
 // Add this route for search functionality
-router.get('/search', wrapAsync(listingController.searchListings));
+
 
 module.exports = router;
 
