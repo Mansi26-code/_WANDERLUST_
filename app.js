@@ -13,6 +13,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const wrapAsync=require("./utils/wrapAsync.js");
 
 // Routers
 const listingRouter = require("./routes/listing.js");
