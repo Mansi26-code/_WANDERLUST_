@@ -104,6 +104,37 @@
         .form-check-label:hover {
             opacity: 1;
         }
+
+        .row-cols-lg-3, .row-cols-md-3, .row-cols-sm-1 {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: auto;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-text {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -154,7 +185,7 @@
     </div>
 
     <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
-        <% for (let listing of allListings) { %>
+        <% allListings.forEach(listing => { %>
             <a href="/listings/<%= listing._id %>" class="listing-link">
                 <div class="card col listing-card" style="width: 22rem;">
                     <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height:20rem"/>
@@ -173,9 +204,8 @@
                     </div>
                 </div>
             </a>
-        <% } %>
+        <% }); %>
     </div>
-    
 
     <script>
         let taxSwitch = document.getElementById("flexSwitchCheckDefault");
@@ -188,4 +218,5 @@
     </script>
 </body>
 </html>
+
 

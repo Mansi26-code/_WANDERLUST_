@@ -5,7 +5,6 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports = {
-   
 
     renderNewForm: (req, res) => {
         res.render('listings/new');
@@ -46,6 +45,16 @@ module.exports = {
             res.redirect(`/listings/${newListing._id}`);
         } catch (error) {
             next(error);
+        }
+    },
+
+    index: async (req, res) => {
+        try {
+            const listings = await Listing.find({});
+            res.json(listings);  // Send listings as JSON response
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({ message: 'Error fetching listings' });
         }
     },
 
@@ -113,7 +122,7 @@ module.exports = {
                     { country: searchQuery }
                 ]
             });
-    
+
             if (allListings.length > 0) {
                 res.render('listings/index', { allListings, category: null }); // or send JSON if using AJAX
             } else {
@@ -124,8 +133,4 @@ module.exports = {
             res.status(500).json({ error: 'Something went wrong' });
         }
     }
-    
-
-
-    
 };
