@@ -7,6 +7,7 @@ const multer = require('multer');
 const { storage } = require('../cloudConfig');
 const upload = multer({ storage });
 
+// Define routes
 router.route('/')
   .get(wrapAsync(listingController.index))
   .post(isLoggedIn, upload.single('listing[image]'), validateListing, wrapAsync(listingController.createListing));
@@ -20,10 +21,8 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
-// Add this route for search functionality
-
-
 module.exports = router;
+
 
 
 
