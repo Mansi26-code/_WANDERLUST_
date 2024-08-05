@@ -5,33 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listings</title>
     <style>
-        /* Your CSS styles */
         .filter {
             text-align: center;
-            margin-right: 36px;
-            margin-top: 2.5rem;
+            margin: 2.5rem 36px 0 0;
             opacity: 0.7;
             cursor: pointer;
         }
-
         .filters {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            font-style: bold;
-            font-size: 0.8rem;
             font-weight: 500;
-            align-items: center; /* Align items to center */
+            font-size: 0.8rem;
         }
-
         .filter:hover {
             opacity: 1;
         }
-
         .tax-info {
             display: none; /* Initial state hidden */
         }
-
         .tax-toggle {
             display: flex;
             border: 1px solid black;
@@ -39,28 +31,24 @@
             height: 3.1rem;
             padding: 1rem;
             align-items: center;
-            margin-top: 1.7rem;
+            margin: 1.7rem 0 0 12px;
             cursor: pointer;
-            margin-left: 12px;
         }
-
         .form-check {
             display: flex;
             align-items: center;
         }
-
         .form-check-input {
-            width: 45px; /* Increased width */
-            height: 23px; /* Increased height */
+            width: 45px;
+            height: 23px;
             cursor: pointer;
-            margin-right: 0px;
+            margin-right: 0;
             position: relative;
             appearance: none;
             background-color: #ccc;
             border-radius: 12.5px;
             transition: background-color 0.3s;
         }
-
         .form-check-input::before {
             content: '';
             position: absolute;
@@ -70,7 +58,6 @@
             border-radius: 12.5px;
             transition: background-color 0.3s;
         }
-
         .form-check-input::after {
             content: '';
             position: absolute;
@@ -82,63 +69,59 @@
             left: 1px;
             transition: transform 0.3s;
         }
-
         .form-check-input:checked::before {
             background-color: #4caf50;
         }
-
         .form-check-input:checked::after {
             transform: translateX(21px);
         }
-
         .form-check-label {
             cursor: pointer;
             font-size: 1rem;
             font-weight: 500;
             opacity: 0.7;
-            margin-bottom: 0; 
+            margin-bottom: 0;
             margin-left: 20px;
-            /* Align text vertically with switch */
         }
-
         .form-check-label:hover {
             opacity: 1;
         }
-
-        .row-cols-lg-3, .row-cols-md-3, .row-cols-sm-1 {
-            display: flex;
-            flex-wrap: wrap;
-        }
-
         .card {
-            margin: 10px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 40px; /* Added border-radius */
+            border: 2px solid pink; /* Added border */
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
-
         .card:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            transform: translateY(-10px);
+        }
+        .card:active {
+            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.3);
             transform: translateY(-5px);
         }
-
         .card-img-top {
-            width: 100%;
-            height: auto;
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            object-fit: cover; /* Ensure the image covers the area properly */
         }
-
         .card-body {
-            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
         }
-
         .card-text {
-            margin: 0;
+            font-size: 1.2rem;
+            color: #000;
+            text-align: center;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <% layout("/layouts/boilerplate") %>
+
+    <h3>All Listings</h3>
     <div class="filters">
         <div class="filter">
             <div><i class="fa-solid fa-fire"></i></div>
@@ -183,40 +166,49 @@
             </div>
         </div>
     </div>
-
-    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
-        <% allListings.forEach(listing => { %>
-            <a href="/listings/<%= listing._id %>" class="listing-link">
-                <div class="card col listing-card" style="width: 22rem;">
-                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height:20rem"/>
-                    <div class="card-img-overlay"></div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            <b><%= listing.title %></b>
-                            <br/>
-                            <% if (listing.price !== null && typeof listing.price !== 'undefined') { %>
-                                &#8377; <%= listing.price.toLocaleString("en-IN") %>/night;
-                                <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
-                            <% } else { %>
-                                Price not available
-                            <% } %>
-                        </p>
+    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 g-4">
+        <% for(let listing of allListings) { %>
+            <div class="col">
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card h-100">
+                        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height:20rem"/>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <b><%= listing.title %></b>
+                                <br/>
+                                <% if (listing.price !== null && typeof listing.price !== 'undefined') { %>
+                                    &#8377; <%= listing.price.toLocaleString("en-IN") %>/night
+                                    <i class="tax-info"> &nbsp; &nbsp;+18% GST</i>
+                                <% } else { %>
+                                    Price not available
+                                <% } %>
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </a>
-        <% }); %>
+                </a>
+            </div>
+        <% } %>
     </div>
-
     <script>
         let taxSwitch = document.getElementById("flexSwitchCheckDefault");
         taxSwitch.addEventListener("click", () => {
             let taxInfo = document.getElementsByClassName("tax-info");
             for (let info of taxInfo) {
-                info.style.display = taxSwitch.checked ? "inline" : "none";
+                if (info.style.display !== "inline") {
+                    info.style.display = "inline";
+                } else {
+                    info.style.display = "none";
+                }
             }
         });
     </script>
 </body>
 </html>
+
+
+
+
+
+
 
 

@@ -50,14 +50,13 @@ module.exports = {
 
     index: async (req, res) => {
         try {
-            const listings = await Listing.find({});
-            res.json(listings);  // Send listings as JSON response
+          const allListings = await Listing.find({});
+          res.render("listings/index.ejs", { allListings }); // Send listings as JSON response
         } catch (e) {
-            console.error(e);
-            res.status(500).json({ message: 'Error fetching listings' });
+          console.error(e);
+          res.status(500).json({ message: "Error fetching listings" });
         }
-    },
-
+      },
     showListing: async (req, res) => {
         try {
             const listing = await Listing.findById(req.params.id).populate('reviews').populate('owner');
